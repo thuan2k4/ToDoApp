@@ -11,10 +11,12 @@ db = SQLAlchemy(app)
 
 class taskList(db.Model):
   id = db.Column(db.Integer, primary_key=True)
-  task_data = db.Column(db.String(255), unique=True)
+  task_data = db.Column(db.String(50), unique=True)
+  status = db.Column(db.Integer)
 
   def __init__ (self, task_data):
     self.task_data = task_data
+    self.status = 0
     
 
 @app.route('/', methods = ["GET",'POST'])
@@ -38,10 +40,20 @@ def home():
 
       find = taskList.query.filter_by(id=data).first()
 
-      db.session.delete(find)
+      if find:
+        db.session.delete(find)
+        db.session.commit()
+
+    elif response == 'markdown':
+
+      data = request.form['task']
+
+      find = taskList.query.filter_by(id=data).first()
+      find.status = 1
       db.session.commit()
 
     else:
+
       all_task = [db.session.delete(data) for data in taskList.query.all()]
       db.session.commit()
 
@@ -51,4 +63,6 @@ def home():
 
 
 if __name__ == '__main__':
+  with app.app_context():
+    db.create_all()
   app.run(debug=True) 

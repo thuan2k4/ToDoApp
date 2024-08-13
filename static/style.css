@@ -1,0 +1,33 @@
+body {
+  font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
+  min-height: 100vh;
+  background: linear-gradient(135deg, pink, blue);
+}
+.task-row{
+  border-radius: 10px;
+}
+
+.table tbody tr {
+  min-height: 60px;
+}
+
+.table tbody td,.table tbody button{
+  background-color: inherit;
+}
+
+.task-row .action-btn {
+  display: none;
+}
+
+.task-row:hover .action-btn {
+  display: inline-block;
+}
+
+.text{
+  width: 13rem;
+}
+
+.card{
+  min-width: 30vw;
+}
+

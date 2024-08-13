@@ -11,37 +11,8 @@
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"></script>
   <link rel="icon" href="{{ url_for('static', filename='TitleLogo.png') }}">
-  <style>
-    body {
-      font-family: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
-      min-height: 100vh;
-      background: linear-gradient(135deg, pink, blue);
-    }
-    .task-row{
-      border-radius: 10px;
-    }
- 
-    .table tbody tr {
-      background-color: #cfcece; 
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 
-      min-height: 60px;
-    }
-
-    .table tbody td,.table tbody button{
-      background-color: inherit;
-    }
-    .task-row .action-btn {
-      display: none;
-    }
-
-    .task-row:hover .action-btn {
-      display: inline-block;
-    }
-    .text{
-      width: 13rem;
-    }
-
-  </style>
 </head>
 
 <body class="d-flex justify-content-center align-items-center">
@@ -56,7 +27,7 @@
         <div class="card-body">
           <form class="d-flex gap-2" method="post">
             <input type="hidden" name="action" value="add">
-            <input class="form-control " type="text" placeholder="Enter your new task" name="task">
+            <input id="input_task" class="form-control" type="text" placeholder="Enter your new task" name="task" maxlength="50" required>
             <input style="font-size: 30px;" class="form-control w-25 text-light bg-success fw-bold" type="submit"
               value="+">
           </form>
@@ -66,9 +37,28 @@
               {%if all_task%}
 
               {%for data in all_task%}
-              <tr class="mb-2 task-row d-flex align-items-center justify-content-between">
+
+              {%if data.status == 0%}
+              <tr style="background-color: #cfcece;"
+                class="mb-2 task-row d-flex align-items-center justify-content-between">
+              {%else%}
+              <tr style="background-color: rgb(73, 231, 73);"
+                class="mb-2 task-row d-flex align-items-center justify-content-between">
+              {%endif%}
+
                 <td class="ms-3 text">{{data.task_data}}</td>
-                <td class="me-2">
+                <td class="me-2 d-flex gap-2">
+                  <form method="post">
+                    <input type="hidden" name="action" value="markdown">
+                    <button type="submit" class="btn btn-outline-success action-btn markdown" name="task"
+                      value="{{data.id}}">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                        class="bi bi-bookmark" viewBox="0 0 16 16">
+                        <path
+                          d="M2 2a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v13.5a.5.5 0 0 1-.777.416L8 13.101l-5.223 2.815A.5.5 0 0 1 2 15.5zm2-1a1 1 0 0 0-1 1v12.566l4.723-2.482a.5.5 0 0 1 .554 0L13 14.566V2a1 1 0 0 0-1-1z" />
+                      </svg>
+                    </button>
+                  </form>
 
                   <form method="post">
                     <input type="hidden" name="action" value="delete">
@@ -80,7 +70,7 @@
                       </svg>
                     </button>
                   </form>
-                  
+
                 </td>
               </tr>
               {%endfor%}
