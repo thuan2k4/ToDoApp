@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
@@ -52,10 +52,20 @@ def home():
       find.status = 1
       db.session.commit()
 
+    elif response == 'close_markdown':
+
+      data = request.form['task']
+
+      find = taskList.query.filter_by(id=data).first()
+      find.status = 0
+      db.session.commit()
+
     else:
 
       all_task = [db.session.delete(data) for data in taskList.query.all()]
       db.session.commit()
+    
+    
 
   all_task = taskList.query.all()
   count = taskList.query.count()
@@ -63,6 +73,5 @@ def home():
 
 
 if __name__ == '__main__':
-  with app.app_context():
-    db.create_all()
+
   app.run(debug=True) 
